@@ -6,7 +6,9 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float speedX = -1f;
 
-    Rigidbody2D rb;
+    private float horizontal = 0f;
+    
+    private Rigidbody2D rb;
 
     const float speedXMultiplayer = 50f;
 
@@ -15,8 +17,13 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
-    private void FixUpdate()
+    private void Update()
     {
-        rb.velocity = new Vector2(speedX * speedXMultiplayer * Time.fixedDeltaTime, rb.velocity.y);
+        horizontal = Input.GetAxis("Horizontal");
+    }
+
+    private void FixedUpdate()
+    {
+        rb.velocity = new Vector2(horizontal * speedX * speedXMultiplayer * Time.fixedDeltaTime, rb.velocity.y);
     }
 }
