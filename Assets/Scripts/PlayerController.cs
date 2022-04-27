@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float speedX = -1f;
-    
+
     Rigidbody2D rb;
 
     const float speedXMultiplayer = 50f;
@@ -17,6 +17,6 @@ public class PlayerController : MonoBehaviour
 
     private void FixUpdate()
     {
-        rb.velocity = Vector2(speedX * speedXMultiplayer * Time.fixedDeltaTime, rb.velocity.y);
+        rb.velocity = new Vector2(speedX * speedXMultiplayer * Time.fixedDeltaTime, rb.velocity.y);
     }
 }
