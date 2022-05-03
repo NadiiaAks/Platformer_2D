@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float speedX = -1f;
     [SerializeField] private float speedJump = 400f;
+    [SerializeField] private Animator animator;
 
     private float horizontal = 0f;
     private bool isFacingRight = true;
@@ -24,7 +25,8 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        horizontal = Input.GetAxis("Horizontal");
+        horizontal = Input.GetAxis("Horizontal"); //-1:1
+        animator.SetFloat("speedX", Mathf.Abs(horizontal));
         if(Input.GetKey(KeyCode.W) && isGround)
         {
             isJump = true;
@@ -64,6 +66,10 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.CompareTag("Ground"))
         {
             isGround = true;
+        }
+        if (other.gameObject.CompareTag("Finish"))
+        {
+            Debug.Log("Worked"); 
         }
     }
 }
