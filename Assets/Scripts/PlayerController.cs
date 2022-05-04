@@ -14,9 +14,11 @@ public class PlayerController : MonoBehaviour
     private bool isGround = false;
     private bool isJump = false;
     private bool isFinish = false;
+    private bool isLevelArm = false;
     
     private Rigidbody2D rb;
     private Finish finish;
+    private LevelArm levelArm;
 
     const float speedXMultiplayer = 50f;
 
@@ -24,6 +26,7 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         finish = GameObject.FindGameObjectWithTag("Finish").GetComponent<Finish>();
+        levelArm = FindObjectOfType<LevelArm>();
     }
 
     private void Update()
@@ -34,10 +37,18 @@ public class PlayerController : MonoBehaviour
         {
             isJump = true;
         }
-        if (Input.GetKeyDown(KeyCode.F) && isFinish)
+        if (Input.GetKeyDown(KeyCode.F))
         {
-            finish.FinishLevel();
+            if(isFinish)
+            {
+                finish.FinishLevel();
+            }
+            if (isLevelArm)
+            {
+                levelArm.ActivateLevelArm();
+            }
         }
+        
     }
 
     private void FixedUpdate()
@@ -76,21 +87,33 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        LevelArm levelArmTemp = other.GetComponent<LevelArm>();
+
+        if (other.CompareTag("Finish"))
+        {
+            Debug.Log("Worked");
+            isFinish = true;
+        }
+        if (levelArmTemp != null)
+        {
+            isLevelArm = true;
+        }
+    }
     private void OnTriggerExit2D (Collider2D other)
     {
+        LevelArm levelArmTemp = other.GetComponent<LevelArm>();
+
         if (other.CompareTag("Finish"))
         {
             Debug.Log("Not Worked");
             isFinish = false;
         }
-    }
 
-    private void OnTriggerEnter2D (Collider2D other)  
-    {
-        if (other.CompareTag("Finish"))
+        if (levelArmTemp != null)
         {
-            Debug.Log("Worked");
-            isFinish = true;
+            isLevelArm = false;
         }
     }
 

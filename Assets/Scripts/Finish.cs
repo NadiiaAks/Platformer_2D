@@ -5,6 +5,11 @@ using UnityEngine;
 public class Finish : MonoBehaviour
 {
     private bool isActivated;
+
+    public void Activate()
+    {
+        isActivated = true;
+    }
     public void FinishLevel()
     {
         if (isActivated)
