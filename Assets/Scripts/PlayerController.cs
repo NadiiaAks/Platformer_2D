@@ -13,14 +13,17 @@ public class PlayerController : MonoBehaviour
 
     private bool isGround = false;
     private bool isJump = false;
+    private bool isFinish = false;
     
     private Rigidbody2D rb;
+    private Finish finish;
 
     const float speedXMultiplayer = 50f;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        finish = GameObject.FindGameObjectWithTag("Finish").GetComponent<Finish>();
     }
 
     private void Update()
@@ -30,6 +33,10 @@ public class PlayerController : MonoBehaviour
         if(Input.GetKey(KeyCode.W) && isGround)
         {
             isJump = true;
+        }
+        if (Input.GetKeyDown(KeyCode.F) && isFinish)
+        {
+            finish.FinishLevel();
         }
     }
 
@@ -67,9 +74,24 @@ public class PlayerController : MonoBehaviour
         {
             isGround = true;
         }
-        if (other.gameObject.CompareTag("Finish"))
+    }
+
+    private void OnTriggerExit2D (Collider2D other)
+    {
+        if (other.CompareTag("Finish"))
         {
-            Debug.Log("Worked"); 
+            Debug.Log("Not Worked");
+            isFinish = false;
         }
     }
+
+    private void OnTriggerEnter2D (Collider2D other)  
+    {
+        if (other.CompareTag("Finish"))
+        {
+            Debug.Log("Worked");
+            isFinish = true;
+        }
+    }
+
 }
