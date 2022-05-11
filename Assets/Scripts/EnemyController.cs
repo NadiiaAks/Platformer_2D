@@ -7,24 +7,32 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private float walkDistance = 6f;
     [SerializeField] private float walkSpeed = 1f;
     [SerializeField] private float timeToWait = 5f;
-
+    [SerializeField] private float minDistanceToPlayer = 1.5f;
     private Rigidbody2D _rb;
+    private Transform _playerTransform;
     private Vector2 _leftPosition;
     private Vector2 _rightPosition;
+    private Vector2 _nextPoint;
 
     private bool _isFacingRight = true;
     private bool _isWait = false;
+    private bool _isChasingPlayer;
     private float _waitTime;
 
-    private bool IsFacingRifht
+    public bool IsFacingRifht
     {
         get => _isFacingRight;
     }
 
+    public void StartChasingPlayer()
+    {
+        _isChasingPlayer = true;
+    }
+
     private void Start()
     {
-        _rb = GetComponent<Rigidbody2D>();
-
+        _playerTransform = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        _rb = GetComponent<Rigidbody2D>(); 
         _leftPosition = transform.position;
         _rightPosition = _leftPosition + Vector2.right * walkDistance;
         _waitTime = timeToWait;
@@ -32,7 +40,7 @@ public class EnemyController : MonoBehaviour
 
     private void Update()
     {
-        if(_isWait)
+        if(_isWait && !_isFacingRight)
         {
             Wait();
         }
@@ -48,17 +56,55 @@ public class EnemyController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Vector2 nextPoint = Vector2.right * walkSpeed * Time.fixedDeltaTime;
+        _nextPoint = Vector2.right * walkSpeed * Time.fixedDeltaTime;
 
-        if (!_isFacingRight)
+        if(Mathf.Abs(DistanceToPlayer()) < minDistanceToPlayer)
         {
-            nextPoint.x *= -1;
+            return;
+        }
+
+        if (_isChasingPlayer)
+        {
+            ChasePlayer();
         }
         
-        if (!_isWait)
+        if (!_isWait && !_isChasingPlayer)
         {
-            _rb.MovePosition((Vector2)transform.position + nextPoint);
+            Patrol();
         }
+    }
+
+    private void ChasePlayer()
+    {
+        float distance = DistanceToPlayer();
+        if(distance < 0)
+        {
+            _nextPoint.x *= -1;
+        }
+
+        if(distance > 0.2f && !_isFacingRight)
+        {
+            Flip();
+        } else if(distance < 0.2f && _isFacingRight)
+        {
+            Flip();
+        }
+
+        _rb.MovePosition((Vector2)transform.position + _nextPoint);
+    }
+
+    private float DistanceToPlayer()
+    {
+        return _playerTransform.position.x - transform.position.x;
+    }
+
+    private void Patrol()
+    {
+        if (!_isFacingRight)
+        {
+            _nextPoint.x *= -1;
+        }
+        _rb.MovePosition((Vector2)transform.position + _nextPoint);
     }
 
     private void OnDrawGizmos()
