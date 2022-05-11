@@ -5,9 +5,12 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
     [SerializeField] private float walkDistance = 6f;
-    [SerializeField] private float walkSpeed = 1f;
+    [SerializeField] private float patrolSpeed = 1f;
+    [SerializeField] private float chasingSpeed = 3f;
     [SerializeField] private float timeToWait = 5f;
+    [SerializeField] private float timeToChase = 3f;
     [SerializeField] private float minDistanceToPlayer = 1.5f;
+
     private Rigidbody2D _rb;
     private Transform _playerTransform;
     private Vector2 _leftPosition;
@@ -17,7 +20,10 @@ public class EnemyController : MonoBehaviour
     private bool _isFacingRight = true;
     private bool _isWait = false;
     private bool _isChasingPlayer;
+
     private float _waitTime;
+    private float _chaseTime;
+    private float _walkSpeed;
 
     public bool IsFacingRifht
     {
@@ -27,6 +33,8 @@ public class EnemyController : MonoBehaviour
     public void StartChasingPlayer()
     {
         _isChasingPlayer = true;
+        _chaseTime = timeToChase;
+        _walkSpeed = chasingSpeed;
     }
 
     private void Start()
@@ -36,13 +44,20 @@ public class EnemyController : MonoBehaviour
         _leftPosition = transform.position;
         _rightPosition = _leftPosition + Vector2.right * walkDistance;
         _waitTime = timeToWait;
+        _chaseTime = timeToChase;
+        _walkSpeed = patrolSpeed;
     }
 
     private void Update()
     {
-        if(_isWait && !_isFacingRight)
+        if (_isChasingPlayer)
         {
-            Wait();
+            StartChasingTimer();
+        }
+
+        if(_isWait && !_isChasingPlayer)
+        {
+            StartWaitTimer();
         }
         
         bool isOutOfRightBoundary = _isFacingRight && transform.position.x >= _rightPosition.x;
@@ -56,9 +71,9 @@ public class EnemyController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _nextPoint = Vector2.right * walkSpeed * Time.fixedDeltaTime;
+        _nextPoint = Vector2.right * _walkSpeed * Time.fixedDeltaTime;
 
-        if(Mathf.Abs(DistanceToPlayer()) < minDistanceToPlayer)
+        if(_isChasingPlayer && Mathf.Abs(DistanceToPlayer()) < minDistanceToPlayer)
         {
             return;
         }
@@ -114,7 +129,7 @@ public class EnemyController : MonoBehaviour
     }
 
    //waiting (timer code)
-   private void Wait ()
+   private void StartWaitTimer ()
     {
         _waitTime -= Time.deltaTime;
         if(_waitTime < 0f)
@@ -122,6 +137,18 @@ public class EnemyController : MonoBehaviour
             _waitTime = timeToWait;
             _isWait = false;
             Flip();
+        }
+    }
+
+    private void StartChasingTimer()
+    {
+        _chaseTime -= Time.deltaTime;
+
+        if( _chaseTime < 0f)
+        {
+            _isChasingPlayer = false;
+            _chaseTime = timeToChase;
+            _walkSpeed = patrolSpeed;
         }
     }
     

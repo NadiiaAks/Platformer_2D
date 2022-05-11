@@ -24,7 +24,15 @@ public class EnemyVision : MonoBehaviour
     {
         _origin = transform.position;
 
-        _direction = Vector2.right;
+        if (_enemyController.IsFacingRifht)
+        {
+            _direction = Vector2.right;
+        }
+        else
+        {
+            _direction = Vector2.left;
+        }
+        
 
         RaycastHit2D hit = Physics2D.CircleCast(_origin, circleRadius, _direction, maxDistance, layerMask); //создание невидимого объекта
                                                                                                           //в виде окружности
