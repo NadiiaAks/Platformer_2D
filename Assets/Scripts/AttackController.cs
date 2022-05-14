@@ -8,6 +8,15 @@ public class AttackController : MonoBehaviour
 
     private bool _isAttack;
 
+    public bool IsAttack
+    {
+        get => _isAttack; 
+    }
+
+    public void FinishAttack()
+    {
+        _isAttack = false;
+    }
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
