@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
+    [SerializeField] private float damage = 25f;
+
     private AttackController _attackController;
 
     private void Start()
@@ -13,11 +15,11 @@ public class Weapon : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        EnemyController enemyController = other.GetComponent<EnemyController>();
+        EnemyHealth enemyHealth = other.GetComponent<EnemyHealth>();
 
-        if(enemyController != null && _attackController.IsAttack)
+        if(enemyHealth != null && _attackController.IsAttack)
         {
-            Debug.Log("Hit");
+            enemyHealth.ReduceHealth(damage);
         }
     }
 }
