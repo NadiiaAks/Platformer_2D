@@ -1,26 +1,34 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemyHealth : MonoBehaviour
 {
-    [SerializeField] private float health = 100f;
+    [SerializeField] private float totalHealth = 100f;
+    [SerializeField] private Slider healthEnemy;
 
     private Animator _animator;
+    private float _health;
 
     public void Start()
     {
+        _health = totalHealth;
         _animator = GetComponent<Animator>();
+    }
+    private void Update()
+    {
+        healthEnemy.value = _health / totalHealth;
     }
 
     public void ReduceHealth(float damage)
     {
 
         Debug.Log("HitEnemy");
-        health -= damage;
+        _health -= damage;
         _animator.SetTrigger("takeDamage");
 
-        if(health < 0)
+        if(_health <= 0)
         {
             Die();
         }
