@@ -10,6 +10,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private float timeToWait = 5f;
     [SerializeField] private float timeToChase = 3f;
     [SerializeField] private float minDistanceToPlayer = 1.5f;
+    [SerializeField] private Transform modelTransform;
 
     private Rigidbody2D _rb;
     private Transform _playerTransform;
@@ -156,8 +157,8 @@ public class EnemyController : MonoBehaviour
     private void Flip()
     {
         _isFacingRight = !_isFacingRight;
-        Vector3 enemyFlip = transform.localScale;
+        Vector3 enemyFlip = modelTransform.localScale;
         enemyFlip.x *= (-1);
-        transform.localScale = enemyFlip;
+        modelTransform.localScale = enemyFlip;
     }
 }
