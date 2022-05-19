@@ -8,6 +8,7 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private float totalHealth = 100f;
     [SerializeField] private Animator animator;
     [SerializeField] private Slider healthSlider;
+    [SerializeField] private GameObject gameOverScreen;
 
     private float _health;
 
@@ -37,5 +38,6 @@ public class PlayerHealth : MonoBehaviour
     private void Die()
     {
         gameObject.SetActive(false);
+        gameOverScreen.SetActive(true);
     }
 }
