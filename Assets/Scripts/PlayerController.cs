@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float speedJump = 400f;
     [SerializeField] private Animator animator;
     [SerializeField] private Transform playerModelTransform;
+    [SerializeField] private AudioSource jumpSound;
 
     private float horizontal = 0f;
     private bool isFacingRight = true;
@@ -37,6 +38,7 @@ public class PlayerController : MonoBehaviour
         if(Input.GetKey(KeyCode.W) && isGround)
         {
             isJump = true;
+            jumpSound.Play();
         }
         if (Input.GetKeyDown(KeyCode.F))
         {
