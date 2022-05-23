@@ -35,11 +35,13 @@ public class PlayerController : MonoBehaviour
     {
         horizontal = Input.GetAxis("Horizontal"); //-1:1
         animator.SetFloat("speedX", Mathf.Abs(horizontal));
-        if(Input.GetKey(KeyCode.W) && isGround)
+
+        if(Input.GetKeyDown(KeyCode.W) && isGround)
         {
             isJump = true;
             jumpSound.Play();
         }
+
         if (Input.GetKeyDown(KeyCode.F))
         {
             if(isFinish)
@@ -57,6 +59,7 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         rb.velocity = new Vector2(horizontal * speedX * speedXMultiplayer * Time.fixedDeltaTime, rb.velocity.y);
+
         if (isJump)
         {
             rb.AddForce(new Vector2(0f, speedJump));
@@ -99,6 +102,7 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Worked");
             isFinish = true;
         }
+
         if (levelArmTemp != null)
         {
             isLevelArm = true;
