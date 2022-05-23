@@ -4,14 +4,17 @@ using UnityEngine;
 
 public class LevelArm : MonoBehaviour
 {
-    private Finish finish;
+    private Finish _finish;
+    private Animator _animator;
     private void Start()
     {
-        finish = GameObject.FindGameObjectWithTag("Finish").GetComponent<Finish>();
+        _animator = GetComponent<Animator>();
+        _finish = GameObject.FindGameObjectWithTag("Finish").GetComponent<Finish>();
     }
 
     public void ActivateLevelArm()
     {
-        finish.Activate();
+        _animator.SetTrigger("activate");
+        _finish.Activate();
     }
 }
