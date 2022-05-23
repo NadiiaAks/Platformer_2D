@@ -10,6 +10,8 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private Slider healthSlider;
     [SerializeField] private GameObject gameOverScreen;
     [SerializeField] private AudioSource playerHitSound;
+    [SerializeField] private float recoveryHealth;
+    [SerializeField] private float speedRecovery;
 
     private float _health;
 
@@ -22,6 +24,7 @@ public class PlayerHealth : MonoBehaviour
     {
 
         healthSlider.value = _health / totalHealth;
+        RecoveryHealth();
     }
     public void ReduceHealth(float damage)
     {
@@ -35,6 +38,14 @@ public class PlayerHealth : MonoBehaviour
         if (_health <= 0)
         {
             Die();
+        }
+    }
+
+    public void RecoveryHealth()
+    {
+        if(_health < totalHealth)
+        {
+            _health += recoveryHealth * speedRecovery;
         }
     }
 

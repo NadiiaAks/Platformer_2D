@@ -28,14 +28,15 @@ public class EnemyAttack : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnCollisionStay2D (Collision2D other)
     {
         PlayerHealth playerHealth = other.gameObject.GetComponent<PlayerHealth>();
 
-        if (playerHealth != null && _isDamage)
+        if(playerHealth != null && _isDamage)
         {
             playerHealth.ReduceHealth(damage);
             _isDamage = false;
         }
+
     }
 }
