@@ -20,6 +20,7 @@ public class Finish : MonoBehaviour
         {
             LevelCompleteCanvas.SetActive(true);
             gameObject.SetActive(false);
+            Time.timeScale = 0f;
         }
         else
         {
