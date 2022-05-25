@@ -9,7 +9,6 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private float chasingSpeed = 3f;
     [SerializeField] private float timeToWait = 5f;
     [SerializeField] private float timeToChase = 3f;
-    [SerializeField] private float minDistanceToPlayer = 1.5f;
     [SerializeField] private Transform modelTransform;
 
     private Rigidbody2D _rb;
@@ -21,6 +20,7 @@ public class EnemyController : MonoBehaviour
     private bool _isFacingRight = true;
     private bool _isWait = false;
     private bool _isChasingPlayer;
+    private bool _colliderWithPlayer;
 
     private float _waitTime;
     private float _chaseTime;
@@ -74,7 +74,7 @@ public class EnemyController : MonoBehaviour
     {
         _nextPoint = Vector2.right * _walkSpeed * Time.fixedDeltaTime;
 
-        if(_isChasingPlayer && Mathf.Abs(DistanceToPlayer()) < minDistanceToPlayer)
+        if(_isChasingPlayer && _colliderWithPlayer)
         {
             return;
         }
@@ -160,5 +160,25 @@ public class EnemyController : MonoBehaviour
         Vector3 enemyFlip = modelTransform.localScale;
         enemyFlip.x *= (-1);
         modelTransform.localScale = enemyFlip;
+    }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        PlayerController player = other.gameObject.GetComponent<PlayerController>();
+
+        if(player != null)
+        {
+            _colliderWithPlayer = true;
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D other)
+    {
+        PlayerController player = other.gameObject.GetComponent<PlayerController>();
+
+        if (player != null)
+        {
+            _colliderWithPlayer = false;
+        }
     }
 }
