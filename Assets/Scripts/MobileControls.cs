@@ -4,21 +4,29 @@ using UnityEngine;
 
 public class MobileControls : MonoBehaviour
 {
-    [SerializeField] private AttackController attackController;
-    [SerializeField] private PlayerController playerController;
+    private AttackController _attackController;
+    private PlayerController _playerController;
+
+    private void Start()
+    {
+        GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
+        _attackController = playerObject.GetComponent<AttackController>();
+        _playerController = playerObject.GetComponent<PlayerController>();
+    }
+
 
     public void Attack()
     {
-        attackController.Attack();
+        _attackController.Attack();
     }
 
     public void Jump()
     {
-        playerController.Jump();
+        _playerController.Jump();
     }
 
     public void Interact()
     {
-        playerController.Interact();
+        _playerController.Interact();
     }
 }

@@ -9,7 +9,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Animator animator;
     [SerializeField] private Transform playerModelTransform;
     [SerializeField] private AudioSource jumpSound;
-    [SerializeField] private FixedJoystick fixedJoystick;
 
     private float _horizontal = 0f;
     private bool _isFacingRight = true;
@@ -22,6 +21,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D _rb;
     private Finish _finish;
     private LevelArm _levelArm;
+    private FixedJoystick _fixedJoystick;
 
     const float _speedXMultiplayer = 50f;
 
@@ -29,13 +29,14 @@ public class PlayerController : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody2D>();
         _finish = GameObject.FindGameObjectWithTag("Finish").GetComponent<Finish>();
+        _fixedJoystick = GameObject.FindGameObjectWithTag("Joystick").GetComponent<FixedJoystick>();
         _levelArm = FindObjectOfType<LevelArm>();
     }
 
     private void Update()
     {
         //Mobile moving
-        _horizontal = fixedJoystick.Horizontal;
+        _horizontal = _fixedJoystick.Horizontal;
 
         //PC moving
         //_horizontal = Input.GetAxis("Horizontal"); //-1:1
