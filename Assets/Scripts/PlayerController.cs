@@ -48,17 +48,11 @@ public class PlayerController : MonoBehaviour
             Jump();
         }*/
 
-        if (Input.GetKeyDown(KeyCode.F))
+        //PC Interact
+        /*if (Input.GetKeyDown(KeyCode.F))
         {
-            if(_isFinish)
-            {
-                _finish.FinishLevel();
-            }
-            if (_isLevelArm)
-            {
-                _levelArm.ActivateLevelArm();
-            }
-        }
+            Interact();
+        }*/
         
     }
 
@@ -97,6 +91,18 @@ public class PlayerController : MonoBehaviour
         {
             _isJump = true;
             jumpSound.Play();
+        }
+    }
+
+    public void Interact()
+    {
+        if (_isFinish)
+        {
+            _finish.FinishLevel();
+        }
+        if (_isLevelArm)
+        {
+            _levelArm.ActivateLevelArm();
         }
     }
 

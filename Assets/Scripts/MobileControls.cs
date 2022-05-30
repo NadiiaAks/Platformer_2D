@@ -16,4 +16,9 @@ public class MobileControls : MonoBehaviour
     {
         playerController.Jump();
     }
+
+    public void Interact()
+    {
+        playerController.Interact();
+    }
 }
