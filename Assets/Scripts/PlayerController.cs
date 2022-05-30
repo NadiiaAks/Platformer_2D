@@ -9,48 +9,54 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Animator animator;
     [SerializeField] private Transform playerModelTransform;
     [SerializeField] private AudioSource jumpSound;
+    [SerializeField] private FixedJoystick fixedJoystick;
 
-    private float horizontal = 0f;
-    private bool isFacingRight = true;
+    private float _horizontal = 0f;
+    private bool _isFacingRight = true;
 
-    private bool isGround = false;
-    private bool isJump = false;
-    private bool isFinish = false;
-    private bool isLevelArm = false;
+    private bool _isGround = false;
+    private bool _isJump = false;
+    private bool _isFinish = false;
+    private bool _isLevelArm = false;
     
-    private Rigidbody2D rb;
-    private Finish finish;
-    private LevelArm levelArm;
+    private Rigidbody2D _rb;
+    private Finish _finish;
+    private LevelArm _levelArm;
 
-    const float speedXMultiplayer = 50f;
+    const float _speedXMultiplayer = 50f;
 
     private void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-        finish = GameObject.FindGameObjectWithTag("Finish").GetComponent<Finish>();
-        levelArm = FindObjectOfType<LevelArm>();
+        _rb = GetComponent<Rigidbody2D>();
+        _finish = GameObject.FindGameObjectWithTag("Finish").GetComponent<Finish>();
+        _levelArm = FindObjectOfType<LevelArm>();
     }
 
     private void Update()
     {
-        horizontal = Input.GetAxis("Horizontal"); //-1:1
-        animator.SetFloat("speedX", Mathf.Abs(horizontal));
+        //Mobile moving
+        _horizontal = fixedJoystick.Horizontal;
 
-        if(Input.GetKeyDown(KeyCode.W) && isGround)
+        //PC moving
+        //_horizontal = Input.GetAxis("Horizontal"); //-1:1
+
+        animator.SetFloat("speedX", Mathf.Abs(_horizontal));
+
+        if(Input.GetKeyDown(KeyCode.W) && _isGround)
         {
-            isJump = true;
+            _isJump = true;
             jumpSound.Play();
         }
 
         if (Input.GetKeyDown(KeyCode.F))
         {
-            if(isFinish)
+            if(_isFinish)
             {
-                finish.FinishLevel();
+                _finish.FinishLevel();
             }
-            if (isLevelArm)
+            if (_isLevelArm)
             {
-                levelArm.ActivateLevelArm();
+                _levelArm.ActivateLevelArm();
             }
         }
         
@@ -58,20 +64,20 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rb.velocity = new Vector2(horizontal * speedX * speedXMultiplayer * Time.fixedDeltaTime, rb.velocity.y);
+        _rb.velocity = new Vector2(_horizontal * speedX * _speedXMultiplayer * Time.fixedDeltaTime, _rb.velocity.y);
 
-        if (isJump)
+        if (_isJump)
         {
-            rb.AddForce(new Vector2(0f, speedJump));
-            isGround = false;
-            isJump = false;
+            _rb.AddForce(new Vector2(0f, speedJump));
+            _isGround = false;
+            _isJump = false;
         }
 
-        if (horizontal > 0f && !isFacingRight)
+        if (_horizontal > 0f && !_isFacingRight)
         {
             Flip();
         }
-        else if (horizontal < 0f && isFacingRight)  
+        else if (_horizontal < 0f && _isFacingRight)  
         {
             Flip();
         }
@@ -79,7 +85,7 @@ public class PlayerController : MonoBehaviour
 
     void Flip()
     {
-        isFacingRight = !isFacingRight;
+        _isFacingRight = !_isFacingRight;
         Vector3 playerFlip = playerModelTransform.localScale;
         playerFlip.x *= (-1);
         playerModelTransform.localScale = playerFlip;
@@ -89,7 +95,7 @@ public class PlayerController : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Ground"))
         {
-            isGround = true;
+            _isGround = true;
         }
     }
 
@@ -100,12 +106,12 @@ public class PlayerController : MonoBehaviour
         if (other.CompareTag("Finish"))
         {
             Debug.Log("Worked");
-            isFinish = true;
+            _isFinish = true;
         }
 
         if (levelArmTemp != null)
         {
-            isLevelArm = true;
+            _isLevelArm = true;
         }
     }
     private void OnTriggerExit2D (Collider2D other)
@@ -115,12 +121,12 @@ public class PlayerController : MonoBehaviour
         if (other.CompareTag("Finish"))
         {
             Debug.Log("Not Worked");
-            isFinish = false;
+            _isFinish = false;
         }
 
         if (levelArmTemp != null)
         {
-            isLevelArm = false;
+            _isLevelArm = false;
         }
     }
 
