@@ -4,10 +4,16 @@ using UnityEngine;
 
 public class MobileControls : MonoBehaviour
 {
-   [SerializeField] private AttackController attackController;
+    [SerializeField] private AttackController attackController;
+    [SerializeField] private PlayerController playerController;
 
     public void Attack()
     {
         attackController.Attack();
+    }
+
+    public void Jump()
+    {
+        playerController.Jump();
     }
 }

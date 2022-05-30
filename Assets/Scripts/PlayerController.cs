@@ -42,11 +42,11 @@ public class PlayerController : MonoBehaviour
 
         animator.SetFloat("speedX", Mathf.Abs(_horizontal));
 
-        if(Input.GetKeyDown(KeyCode.W) && _isGround)
+        //PC jumping
+        /*if(Input.GetKeyDown(KeyCode.W))
         {
-            _isJump = true;
-            jumpSound.Play();
-        }
+            Jump();
+        }*/
 
         if (Input.GetKeyDown(KeyCode.F))
         {
@@ -89,6 +89,15 @@ public class PlayerController : MonoBehaviour
         Vector3 playerFlip = playerModelTransform.localScale;
         playerFlip.x *= (-1);
         playerModelTransform.localScale = playerFlip;
+    }
+
+    public void Jump()
+    {
+        if (_isGround)
+        {
+            _isJump = true;
+            jumpSound.Play();
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D other)
